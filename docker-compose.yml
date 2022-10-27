@@ -5,6 +5,7 @@ services:
     build:
       context: ./DotNetCoreWebSample.Web
       dockerfile: Dockerfile
+    container_name: app
     environment:
       ConnectionStrings__DefaultConnection: "Server=sqlexpress;Database=master;User ID=sa;Password=P@ssw0rd;initial catalog=dotnetcorewebsample;MultipleActiveResultSets=True;App=EntityFramework;"
     expose:
@@ -16,6 +17,7 @@ services:
     build:
       context: ./docker/sqlexpress
       dockerfile: Dockerfile
+    container_name: sqlexpress
     environment:
       MSSQL_PID: "Express"
       ACCEPT_EULA: "Y"
@@ -26,6 +28,7 @@ services:
   web:
     build:
       context: ./docker/nginx
+    container_name: web
     environment:
       BACKEND_HOST: "app:5000"  
     ports: 
