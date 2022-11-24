@@ -12,6 +12,8 @@ COPY ["DotNetCoreWebSample.Web.csproj", "./"]
 RUN dotnet restore "DotNetCoreWebSample.Web.csproj"
 COPY . .
 WORKDIR "/src/."
+RUN dotnet add package PagedList
+RUN dotnet add package PagedList.Mvc
 RUN dotnet build "DotNetCoreWebSample.Web.csproj" -c Release -o /app/build
 
 FROM build AS publish

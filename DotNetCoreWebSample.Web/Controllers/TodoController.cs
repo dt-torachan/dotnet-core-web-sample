@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading.Tasks;
+using PagedList;
 
 namespace DotNetCoreWebSample.Web.Controllers
 {
@@ -18,9 +19,13 @@ namespace DotNetCoreWebSample.Web.Controllers
         }
 
         // GET: Todo
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? page)
         {
-            return View(await _service.GetList());
+            var todoList = await _service.GetList();
+            int pageSize = 3;
+            int pageNumber = (page ?? 1);
+            IPagedList<Todo> todoPagedList = todoList.ToPagedList(pageNumber, pageSize);
+            return View(todoPagedList);
         }
 
         // GET: Todo/Details/5

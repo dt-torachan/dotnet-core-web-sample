@@ -2,7 +2,7 @@
 using DotNetCoreWebSample.Web.Repositories;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-
+using Microsoft.EntityFrameworkCore;
 namespace DotNetCoreWebSample.Web.Services
 {
     public interface IToDoService

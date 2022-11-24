@@ -1,4 +1,7 @@
-﻿@model IEnumerable<Todo>
+﻿@using PagedList;
+@using PagedList.Mvc;
+@model PagedList.IPagedList<Todo>
+
 
 @{
     ViewData["Title"] = "Index";
@@ -13,10 +16,10 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Description)
+                Description
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CreatedDate)
+                Created Date
             </th>
             <th></th>
         </tr>
@@ -39,3 +42,71 @@
 }
     </tbody>
 </table>
+<div>
+    Page: @Model.PageNumber / @Model.PageCount
+</div>
+@if((Model.PageNumber) > 1){
+<a asp-action=""
+    asp-route-page="@(Model.PageNumber - 1)"
+    class="btn btn-secondary" disabled="">
+    Prev
+</a>
+}
+@if((Model.PageNumber) < @Model.PageCount){
+<a asp-action=""
+    asp-route-page="@(Model.PageNumber + 1)"
+    class="btn btn-secondary">
+    Next
+</a>
+}
+<div>
+    @{
+        // ページ総数が 5 を超える場合は Prev と Next の間に 1 2 3 4 5 と
+        // いうようなリンクを表示し、その番号のページに飛べるようにした
+        if (Model.PageCount > 5)
+        {
+            if (Model.PageNumber <= 3)
+            {
+                for (int i = 1; i <= 5; i++)
+                {
+                    var disabled = (Model.PageNumber == i) ? "disabled" : "";
+                    <a asp-action="PagedIndex"
+                    asp-route-sortOrder="@ViewData["CurrentSort"]"
+                    asp-route-pageNumber="@i"
+                    asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                    class="btn btn-secondary @disabled">
+                        @i
+                    </a>
+                }
+            }
+            else if (Model.PageNumber < (Model.PageCount - 2))
+            {
+                for (int i = Model.PageNumber - 2; i <= Model.PageNumber + 2; i++)
+                {
+                    var disabled = (Model.PageNumber == i) ? "disabled" : "";
+                    <a asp-action="PagedIndex"
+                    asp-route-sortOrder="@ViewData["CurrentSort"]"
+                    asp-route-pageNumber="@i"
+                    asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                    class="btn btn-secondary @disabled">
+                        @i
+                    </a>
+                }
+            }
+            else
+            {
+                for (int i = Model.PageCount - 4; i <= Model.PageCount; i++)
+                {
+                    var disabled = (Model.PageNumber == i) ? "disabled" : "";
+                    <a asp-action="PagedIndex"
+                    asp-route-sortOrder="@ViewData["CurrentSort"]"
+                    asp-route-pageNumber="@i"
+                    asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                    class="btn btn-secondary @disabled">
+                        @i
+                    </a>
+                }
+            }
+        }
+    }
+</div>
